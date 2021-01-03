@@ -1,0 +1,13 @@
+{
+  "autoload": {
+    "psr-4": {
+      "Core\\": "core",
+      "App\\": "src"
+    }
+  },
+  "require": {
+    "ext-json": "*",
+    "doctrine/orm": "^2.7.5",
+    "ext-openssl": "*"
+  }
+}
