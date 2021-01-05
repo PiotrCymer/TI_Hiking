@@ -9,9 +9,9 @@ final class ResponseHtml extends Response
 
     public function sendResponse()
     {
-        $content = $this->data['content'];
+        $view = $this->data['view'];
 
-        include($this->data['template']);
+        echo $view;
     }
 
     public function setContentType()

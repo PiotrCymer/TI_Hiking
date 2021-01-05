@@ -15,26 +15,22 @@ abstract class Controller
 
     abstract public function __construct(EntityManager $entityManager, array $filters);
 
-    protected function renderMainTemplate($content)
+    protected function renderView($template, array $args = []): string
     {
-        if (!file_exists($this->mainTemplate)) {
-            die("Wystąpił błąd");
-        }
+        extract($args);
 
-        include($this->mainTemplate);
-    }
-
-    protected function renderView($template): string
-    {
         ob_start();
+
         include($template);
 
-        $content = ob_get_contents();
+        $content = ob_get_clean();
+        include($this->mainTemplate);
+
+        $view = ob_get_contents();
 
         ob_clean();
 
-        return $content;
-
+        return $view;
     }
 
     protected function pre($data)
