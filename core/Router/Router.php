@@ -46,7 +46,7 @@ final class Router
                     $comment = $this->parseComment($method->getDocComment());
 
                     if ($comment['route'] == $this->urlArray['route']) {
-                        if(isset($comment['authguard']) && $comment['authguard'] != "") {
+                        if (isset($comment['authguard']) && $comment['authguard'] != "") {
                             $authGuard = $comment['authguard'];
                         } else {
                             $authGuard = "";
@@ -78,7 +78,10 @@ final class Router
             $classReflection = new \ReflectionClass('\\App\Controller\\' . $controller);
             $controllerAnnotation = $this->parseComment($classReflection->getDocComment());
 
-            if ($controllerAnnotation['controller'] == $this->urlArray['controller']) {
+
+            if ($controllerAnnotation['controller'] == 'main' && $this->urlArray['route'] == '/' && $this->urlArray['controller'] != '') {
+                return array('status' => true, 'controller' => $classReflection);
+            } else if ($controllerAnnotation['controller'] == $this->urlArray['controller']) {
                 return array('status' => true, 'controller' => $classReflection);
             }
         }
@@ -131,7 +134,14 @@ final class Router
                 $singlePath = strtok("/");
                 $i++;
             }
-            $urlArray['route'] = $this->parseEndpoint($endpoint);
+            $route = $this->parseEndpoint($endpoint);
+            if ($route == '/' && $urlArray['controller'] != '') {
+                $urlArray['route'] = $urlArray['controller'];
+                $urlArray['controller'] = 'main';
+            } else {
+                $urlArray['route'] = $route;
+            }
+
             if (isset($parsedUrl['query'])) {
                 $urlArray['filters'] = $this->parseFilters($parsedUrl['query']);
             } else {
@@ -141,9 +151,18 @@ final class Router
             $this->urlArray = $urlArray;
 
             return true;
-        }
+        } else {
+            if (empty($_SESSION['user'])) {
+                $this->urlArray['controller'] = 'main';
+                $this->urlArray['route'] = 'signin';
+                $this->urlArray['filters'] = [];
+            } else {
+                //TODO redirect to user homepage
+            }
 
-        return false;
+            return true;
+
+        }
     }
 
     private function parseFilters($filtersString): array
