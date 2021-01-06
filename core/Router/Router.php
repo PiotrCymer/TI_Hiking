@@ -2,6 +2,8 @@
 
 namespace Core\Router;
 
+use App\Controller\MainController;
+
 final class Router
 {
 
@@ -78,10 +80,7 @@ final class Router
             $classReflection = new \ReflectionClass('\\App\Controller\\' . $controller);
             $controllerAnnotation = $this->parseComment($classReflection->getDocComment());
 
-
-            if ($controllerAnnotation['controller'] == 'main' && $this->urlArray['route'] == '/' && $this->urlArray['controller'] != '') {
-                return array('status' => true, 'controller' => $classReflection);
-            } else if ($controllerAnnotation['controller'] == $this->urlArray['controller']) {
+            if ($controllerAnnotation['controller'] == $this->urlArray['controller']) {
                 return array('status' => true, 'controller' => $classReflection);
             }
         }
@@ -120,25 +119,34 @@ final class Router
 
         if ($parsedUrl['path'] != '/') {
             $urlArray = [];
-            $endpoint = "";
+            $routePath = "";
+            $firstPath = "";
 
             $singlePath = strtok($parsedUrl['path'], '/');
 
             $i = 0;
             while ($singlePath !== false) {
                 if ($i == 0) {
-                    $urlArray['controller'] = $singlePath;
+                    $firstPath = $singlePath;
                 } else {
-                    $endpoint .= "/" . $singlePath;
+                    $routePath .= "/" . $singlePath;
                 }
+
                 $singlePath = strtok("/");
                 $i++;
             }
-            $route = $this->parseEndpoint($endpoint);
-            if ($route == '/' && $urlArray['controller'] != '') {
-                $urlArray['route'] = $urlArray['controller'];
-                $urlArray['controller'] = 'main';
+            $route = $this->parseRoute($routePath);
+
+            if($route == "/") {
+                if (in_array($firstPath, $this->getBaseControllerMethods())) {
+                    $urlArray['controller'] = 'main';
+                    $urlArray['route'] = $firstPath;
+                } else {
+                    $urlArray['controller'] = $firstPath;
+                    $urlArray['route'] = '/';
+                }
             } else {
+                $urlArray['controller'] = $firstPath;
                 $urlArray['route'] = $route;
             }
 
@@ -186,7 +194,7 @@ final class Router
         return $filters;
     }
 
-    private function parseEndpoint(string $endpoint): string
+    private function parseRoute(string $endpoint): string
     {
         if ($endpoint == "") {
             return "/";
@@ -214,6 +222,32 @@ final class Router
     private function removeCommentSigns(string $comment): string
     {
         return strtr($comment, array('*/' => "", "*" => '', ' ' => ''));
+    }
+
+    private function getBaseControllerMethods(): array
+    {
+        try {
+            $baseController = new \ReflectionClass(MainController::class);
+
+            $baseControllerMethods = [];
+            foreach ($baseController->getMethods() as $method) {
+                if ($method->isPrivate() || $method->isProtected() || $method->isConstructor()) {
+                    continue;
+                }
+
+                $comment = $this->parseComment($method->getDocComment());
+
+                array_push($baseControllerMethods, $comment['route']);
+            }
+
+            return $baseControllerMethods;
+        } catch (\Exception $e) {
+            if ($e instanceof \ReflectionException) {
+                return [];
+            }
+
+            die("Wystąpił nieoczekiwany błąd. Przepraszamy");
+        }
     }
 
     private function pre($data)
