@@ -15,6 +15,10 @@ abstract class Controller
 
     abstract public function __construct(EntityManager $entityManager, array $filters);
 
+    abstract protected function getStylesheets(string $page) : array;
+
+    abstract protected function getJsScripts(string $page) : array;
+
     protected function renderView($template, array $args = []): string
     {
         extract($args);

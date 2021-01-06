@@ -25,7 +25,7 @@ final class MainController extends Controller
     /**
      * @Route('signin')
      */
-    public function test(): Response
+    public function signIn(): Response
     {
 
         if (!empty($_POST['action']) && $_POST['action'] == 'signin') {
@@ -55,7 +55,7 @@ final class MainController extends Controller
 
     }
 
-    private function getStylesheets($page): array
+    protected function getStylesheets($page): array
     {
         switch ($page) {
             case 'signin':
@@ -72,7 +72,7 @@ final class MainController extends Controller
         return $stylesheets;
     }
 
-    private function getJsScripts($page): array
+    protected function getJsScripts($page): array
     {
         switch ($page) {
             case 'signin':
