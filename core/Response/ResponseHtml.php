@@ -9,9 +9,13 @@ final class ResponseHtml extends Response
 
     public function sendResponse()
     {
-        $view = $this->data['view'];
+        if(empty($this->data['view'])) {
+            include($this->data['file']);
+        } else {
+            $view = $this->data['view'];
 
-        echo $view;
+            echo $view;
+        }
     }
 
     public function setContentType()
