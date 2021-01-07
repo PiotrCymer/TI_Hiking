@@ -32,6 +32,13 @@ final class MainController extends Controller
             $userCheck = $this->em->getRepository("App\Entity\Users")->findOneBy(['email' => $_POST['login'], 'password' => md5($_POST['password'])]);
             sleep(1);
             if ($userCheck) {
+                $_SESSION['user'] = [
+                    'id' => $userCheck->getUserId(),
+                    'email' => $userCheck->getEmail(),
+                    'name' => $userCheck->getName(),
+                    'surname' => $userCheck->getSurname()
+                ];
+
                 return new ResponseJson(200,
                     [
                         "status" => true,
@@ -53,6 +60,20 @@ final class MainController extends Controller
             return new ResponseHtml(201, ["view" => $view]);
         }
 
+    }
+
+    /**
+     * @Route('logout')
+     */
+    public function logout(): Response
+    {
+        unset($_SESSION['user']);
+
+        return new ResponseJson(200,
+            [
+                "status" => true,
+                "message" => "Wylogowano pomyślnie"
+            ]);
     }
 
     protected function getStylesheets($page): array

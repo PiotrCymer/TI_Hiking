@@ -37,7 +37,7 @@ $(function () {
                 dataType: 'json',
                 statusCode: {
                     200: function (response) {
-                        console.log('Zalogowano');
+                        window.location.href = '/profil-uzytkownika';
                     },
                     401: function (response) {
                         errorsContainer.login.show();
@@ -49,6 +49,19 @@ $(function () {
                 }
             });
         }
+    });
+
+    $('.logoutBtn').on('click', function (event) {
+        event.preventDefault();
+        $.ajax({
+            url: '/logout',
+            method: 'POST',
+            statusCode: {
+                200: function (response) {
+                    window.location.href = '/signin';
+                }
+            }
+        });
     });
 
     function validateLoginForm() {
