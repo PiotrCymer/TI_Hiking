@@ -27,12 +27,15 @@ abstract class Controller
 
         include($template);
 
-        $content = ob_get_clean();
+        $content = ob_get_contents();
+        ob_clean();
+
+        ob_start();
         include($this->mainTemplate);
 
         $view = ob_get_contents();
-
         ob_clean();
+
 
         return $view;
     }
