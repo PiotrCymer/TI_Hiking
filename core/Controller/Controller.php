@@ -40,6 +40,21 @@ abstract class Controller
         return $view;
     }
 
+    protected function checkIfRequiredDataExist($required)
+    {
+        $status = true;
+
+        foreach ($required as $v) {
+            if (!array_key_exists($v, $_POST)) {
+                $status = false;
+            } else if ($_POST[$v] == "") {
+                $status = false;
+            }
+        }
+
+        return $status;
+    }
+
     protected function pre($data)
     {
         echo "<pre>";

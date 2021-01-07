@@ -32,6 +32,16 @@ class Users
     private $password;
 
     /**
+     * @ORM\Column(type = "string", length = 64)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type = "string", length = 64)
+     */
+    private $surname;
+
+    /**
      * Get userId.
      *
      * @return int
@@ -87,6 +97,54 @@ class Users
     public function getPassword()
     {
         return $this->password;
+    }
+
+    /**
+     * Set name.
+     *
+     * @param string $name
+     *
+     * @return Users
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get name.
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set surname.
+     *
+     * @param string $surname
+     *
+     * @return Users
+     */
+    public function setSurname($surname)
+    {
+        $this->surname = $surname;
+
+        return $this;
+    }
+
+    /**
+     * Get surname.
+     *
+     * @return string
+     */
+    public function getSurname()
+    {
+        return $this->surname;
     }
 
 }

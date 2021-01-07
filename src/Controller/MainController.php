@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Users;
 use Core\Controller\Controller;
 use Core\Response\Response;
 use Core\Response\ResponseHtml;
@@ -63,6 +64,54 @@ final class MainController extends Controller
     }
 
     /**
+     * @Route('rejestracja')
+     */
+    public function register(): Response
+    {
+        if (isset($_POST['action']) && $_POST['action'] == 'register') {
+            sleep(1);
+            $required = ['email', 'name', 'surname', 'password'];
+            $checkEmail = $this->em->getRepository("App\Entity\Users")->findOneBy(['email' => $_POST['email']]);
+            if($checkEmail) {
+                return new ResponseJson(401,
+                    [
+                        "status" => false,
+                        "message" => "Podany adres e-mail już istnieje w naszej bazie"
+                    ]);
+            }
+
+            if($this->checkIfRequiredDataExist($required)) {
+                $newUser = new Users();
+                $newUser->setName($_POST['name']);
+                $newUser->setSurname($_POST['surname']);
+                $newUser->setEmail($_POST['email']);
+                $newUser->setPassword(md5($_POST['password']));
+
+                $this->em->persist($newUser);
+                $this->em->flush();
+
+                return new ResponseJson(200,
+                    [
+                        "status" => true,
+                        "message" => "Zarejestrowano pomyślnie"
+                    ]);
+            }
+
+            return new ResponseJson(400,
+                [
+                    "status" => false,
+                    "message" => "Wystąpił błąd. Prosimy spróbować ponownie"
+                ]);
+        } else {
+            $template = $_SERVER['DOCUMENT_ROOT'] . $this->templatesDirectory . "register.php";
+
+            $view = $this->renderView($template, ['stylesheets' => $this->getStylesheets('register'), 'scripts' => $this->getJsScripts('register')]);
+
+            return new ResponseHtml(201, ["view" => $view]);
+        }
+    }
+
+    /**
      * @Route('logout')
      */
     public function logout(): Response
@@ -85,6 +134,12 @@ final class MainController extends Controller
                     './assets/css/spin.css'
                 ];
                 break;
+            case 'register':
+                $stylesheets = [
+                    './assets/css/register.css',
+                    './assets/css/spin.css'
+                ];
+                break;
             default:
                 $stylesheets = [];
                 break;
@@ -104,6 +159,15 @@ final class MainController extends Controller
                     'module' => [
                         './assets/js/spin.js',
                         './assets/js/signin.js'
+                    ]
+                ];
+                break;
+            case 'register':
+                $scripts = [
+                    'common' => [
+                    ],
+                    'module' => [
+                        './assets/js/register.js'
                     ]
                 ];
                 break;
