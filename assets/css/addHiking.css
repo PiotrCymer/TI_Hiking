@@ -1,0 +1,15 @@
+.imagesPreview img {
+    max-width: 100%;
+}
+
+.videoPreview img {
+    max-width: 100%;
+}
+
+#newHikingError {
+    display: none;
+}
+
+.videoPreview {
+    display: none;
+}
