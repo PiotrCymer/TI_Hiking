@@ -11,4 +11,21 @@ $(document).ready(function() {
             }
         });
     });
+
+    $('#sortBtn').on('click', function() {
+        let sortOrder = $('#sortOrder').val();
+
+        $.ajax({
+            url: '/profil-uzytkownika',
+            method: 'post',
+            data: {
+                action: 'sort',
+                sortOrder: sortOrder
+            }
+        }).done(function(response) {
+            console.log(1);
+            console.log(response.body);
+            $('#tableBody').html(response.body);
+        });
+    });
 });

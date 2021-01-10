@@ -32,11 +32,41 @@ final class UserController extends Controller
     public function hikingList()
     {
 
-        $template = $_SERVER['DOCUMENT_ROOT'] . $this->templatesDirectory . "hikingList.php";
+        if(isset($_POST['sortOrder'])) {
+            switch($_POST['sortOrder']) {
+                case 'fromNewest':
+                    $sortOrder = "DESC";
+                    break;
+                case 'fromOldest':
+                default:
+                    $sortOrder = 'ASC';
+                    break;
+            }
+        } else {
+            $sortOrder = "ASC";
+        }
 
-        $view = $this->renderView($template, ['stylesheets' => $this->getStylesheets('user'), 'scripts' => $this->getJsScripts('signin')]);
+        /**
+         * @var Hiking $hikings
+         */
+        $hikings = $this->em->getRepository("App\Entity\Hiking")->findBy(["userId" => $_SESSION['user']['id']], ['startDate' => $sortOrder]);
 
-        return new ResponseHtml(201, ["view" => $view]);
+
+
+        if(isset($_POST['action']) && $_POST['action'] == 'sort') {
+            $template = $_SERVER['DOCUMENT_ROOT'] . $this->templatesDirectory . "hikingListData.php";
+
+            $view = $this->renderTemplate($template, ['stylesheets' => $this->getStylesheets('user'), 'scripts' => $this->getJsScripts('signin'), 'hikings' => $hikings]);
+
+            return new ResponseJson(201, ['body' => $view]);
+        } else {
+            $template = $_SERVER['DOCUMENT_ROOT'] . $this->templatesDirectory . "hikingList.php";
+
+            $view = $this->renderView($template, ['stylesheets' => $this->getStylesheets('user'), 'scripts' => $this->getJsScripts('signin'), 'hikings' => $hikings]);
+
+            return new ResponseHtml(201, ["view" => $view]);
+        }
+
     }
 
     /**
@@ -112,6 +142,19 @@ final class UserController extends Controller
         }
 
 
+    }
+
+    /**
+     * @Route('wedrowki/{id}')
+     * @AuthGuard('userProfileAuthGuard')
+     */
+    public function singleHiking($id)
+    {
+        $template = $_SERVER['DOCUMENT_ROOT'] . $this->templatesDirectory . "singleHiking.php";
+
+        $view = $this->renderView($template, ['stylesheets' => $this->getStylesheets(''), 'scripts' => $this->getJsScripts('s')]);
+
+        return new ResponseHtml(201, ["view" => $view]);
     }
 
     private function getExtension(string $type): string

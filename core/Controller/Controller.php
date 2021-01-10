@@ -40,6 +40,20 @@ abstract class Controller
         return $view;
     }
 
+    protected function renderTemplate($template, array $args = []) : string
+    {
+        extract($args);
+
+        ob_start();
+
+        include($template);
+
+        $content = ob_get_contents();
+        ob_clean();
+
+        return $content;
+    }
+
     protected function checkIfRequiredDataExist($required)
     {
         $status = true;

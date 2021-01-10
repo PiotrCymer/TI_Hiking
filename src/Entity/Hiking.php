@@ -222,6 +222,29 @@ class Hiking
     }
 
     /**
+     * Get random image.
+     *
+     * @return string
+     */
+    public function getRandomImage()
+    {
+        $imageArray = unserialize($this->images);
+
+        $imagesCnt = count($imageArray);
+
+        if ($imagesCnt == 0) {
+            return "/assets/images/no-image.png";
+        }
+
+        $randomImageIndex = rand(0, $imagesCnt - 1);
+
+        $image = $imageArray[$randomImageIndex];
+
+        return $image;
+    }
+
+
+    /**
      * Set video.
      *
      * @param string $video
