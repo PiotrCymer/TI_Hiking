@@ -37,8 +37,8 @@ final class UserController extends Controller
     public function hikingList()
     {
 
-        if(isset($_POST['sortOrder'])) {
-            switch($_POST['sortOrder']) {
+        if (isset($_POST['sortOrder'])) {
+            switch ($_POST['sortOrder']) {
                 case 'fromNewest':
                     $sortOrder = "DESC";
                     break;
@@ -57,8 +57,7 @@ final class UserController extends Controller
         $hikings = $this->em->getRepository("App\Entity\Hiking")->findBy(["userId" => $_SESSION['user']['id']], ['startDate' => $sortOrder]);
 
 
-
-        if(isset($_POST['action']) && $_POST['action'] == 'sort') {
+        if (isset($_POST['action']) && $_POST['action'] == 'sort') {
             $template = $_SERVER['DOCUMENT_ROOT'] . $this->templatesDirectory . "hikingListData.php";
 
             $view = $this->renderTemplate($template, ['stylesheets' => $this->getStylesheets('user'), 'scripts' => $this->getJsScripts('signin'), 'hikings' => $hikings]);
@@ -83,7 +82,6 @@ final class UserController extends Controller
         if (isset($_POST['action']) && $_POST['action'] == 'add') {
             $requiredVales = ['hikingName', 'hikingStartDate', 'hikingEndDate', 'hikingStartPlace', 'hikingEndPlace', 'hikingLength'];
             if ($this->checkIfRequiredDataExist($requiredVales)) {
-                $this->pre($_FILES);
 
 
                 $newHiking = new Hiking();
@@ -123,9 +121,8 @@ final class UserController extends Controller
                     $pathToDatabase = $this->hikingVideosPath . "/" . $newName;
                     $pathToUpload = $_SERVER['DOCUMENT_ROOT'] . $pathToDatabase;
                     move_uploaded_file($_FILES['hikingVideo']['tmp_name'], $pathToUpload);
-                    array_push($images, $pathToDatabase);
 
-                    $newHiking->setVideo(serialize($pathToDatabase));
+                    $newHiking->setVideo($pathToDatabase);
                 } else {
                     $newHiking->setVideo("");
                 }
@@ -159,7 +156,7 @@ final class UserController extends Controller
 
         $hiking = $this->em->getRepository("App\Entity\Hiking")->findOneBy(["id" => $id]);
 
-        if(!$hiking) {
+        if (!$hiking) {
             $view = $this->renderView($template, ['stylesheets' => $this->getStylesheets(''), 'scripts' => $this->getJsScripts('s'), 'noHiking' => true]);
 
             $response = new ResponseHtml(200, ["view" => $view]);
@@ -187,6 +184,7 @@ final class UserController extends Controller
                 break;
 
             case 'application/mp4':
+            case 'video/mp4':
                 $extension = ".mp4";
                 break;
 
@@ -211,7 +209,8 @@ final class UserController extends Controller
             case 'addHiking':
                 $stylesheets = [
                     'https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css',
-                    '/assets/css/addHiking.css'
+                    '/assets/css/addHiking.css',
+                    './assets/css/spin.css',
                 ];
                 break;
             default:
@@ -228,20 +227,21 @@ final class UserController extends Controller
             case 'user':
                 $scripts = [
                     'common' => [
-                        '/assets/js/addHiking.js'
                     ],
                     'module' => [
-                        '/assets/js/spin.js'
+                        '/assets/js/spin.js',
+                        '/assets/js/addHiking.js'
                     ]
                 ];
                 break;
             case 'addHiking':
                 $scripts = [
                     'common' => [
-                        '/assets/js/addHiking.js',
                         'https://cdn.jsdelivr.net/npm/flatpickr'
                     ],
-                    'module' => []
+                    'module' => [
+                        '/assets/js/addHiking.js'
+                    ]
                 ];
                 break;
             default:

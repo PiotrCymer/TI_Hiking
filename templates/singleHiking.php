@@ -70,6 +70,7 @@
         <?php if ($hiking->getVideo()): ?>
             <div class="row mt-4 videoPreview">
                 <video width="400" controls id="hikingVideoPreview">
+                    <source src="<?php echo $hiking->getVideo();?>" type="video/mp4">
                     Your browser does not support HTML5 video.
                 </video>
             </div>

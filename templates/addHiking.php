@@ -49,7 +49,7 @@
     <div class="row mt-4 imagesPreview"></div>
     <div class="row mt-4">
         <div class="form-group col-md-12">
-            <label for="length">Film z wędrówki (max 1)</label>
+            <label for="length">Film z wędrówki (max 1) - maksymalny rozmiar pliku 7MB</label>
             <input type="file" name="hikingVideo" id="hikingVideo">
         </div>
     </div>
@@ -58,8 +58,11 @@
             Your browser does not support HTML5 video.
         </video>
     </div>
-
+    <div id="addHikingLoader"></div>
     <button type="submit" class="btn btn-primary mt-4 saveHiking">Zapisz wędrówke</button>
 
 
 </form>
+<style>
+
+</style>

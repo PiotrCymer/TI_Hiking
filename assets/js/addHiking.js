@@ -1,4 +1,9 @@
+import * as Spin from "./spin";
+
 $(document).ready(function () {
+
+    const target = document.getElementById('addHikingLoader');
+    const spinner = new Spin.Spinner();
 
     $('#startDate').flatpickr({
         enableTime: true,
@@ -27,7 +32,9 @@ $(document).ready(function () {
     $('.saveHiking').on('click', function (event) {
         event.preventDefault();
         let form = $('#newHikingForm');
-
+        $('#addHikingLoader').show(200);
+        spinner.spin(target);
+        $('.saveHiking').hide();
         let formData = form.serialize();
 
         let x = new FormData($('#newHikingForm').get(0));
@@ -47,6 +54,9 @@ $(document).ready(function () {
                 400: function (response) {
                     $('#newHikingError').show();
                     $('#newHikingError').text(response.responseJSON.message);
+                    $('#addHikingLoader').hide();
+                    spinner.stop();
+                    $('.saveHiking').show();
                 }
             }
         });
