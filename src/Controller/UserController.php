@@ -18,11 +18,16 @@ final class UserController extends Controller
     private string $hikingImagesPath = "/assets/images/trips";
     private string $hikingVideosPath = "/assets/videos/trips";
 
+    public array $userHiking;
+
     public function __construct(EntityManager $entityManager, array $filters)
     {
         $this->mainTemplate = $_SERVER['DOCUMENT_ROOT'] . $this->templatesDirectory . "userProfileMain.php";
         $this->em = $entityManager;
         $this->filters = $filters;
+
+        $this->userHiking = $this->em->getRepository("App\Entity\Hiking")->findBy(["userId" => $_SESSION['user']['id']]);
+
     }
 
     /**

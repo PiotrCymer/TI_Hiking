@@ -23,6 +23,7 @@ $(function () {
 
         if (validateLoginForm()) {
             $('#signInBtn').hide();
+            $('.registerInfo').hide();
             spinner.spin(target);
 
 
@@ -44,6 +45,7 @@ $(function () {
                         errorsContainer.login.text(response.responseJSON.message);
                         spinner.stop();
                         $('#signInBtn').show();
+                        $('.registerInfo').show();
 
                     }
                 }
@@ -56,7 +58,7 @@ $(function () {
 
         if (loginInput.val() === "") {
             errorsContainer.email.show();
-            errorsContainer.email.text('Email field cannot be empty');
+            errorsContainer.email.text('Adres e-mail nie może być pusty');
             isValid = false;
         } else {
             errorsContainer.email.hide();
@@ -65,7 +67,7 @@ $(function () {
 
         if (passwordInput.val() === "") {
             errorsContainer.password.show();
-            errorsContainer.password.text('Password field cannot be empty');
+            errorsContainer.password.text('Pole z hasłem nie może być puste');
             isValid = false
         } else {
             errorsContainer.password.hide();

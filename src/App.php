@@ -11,7 +11,6 @@ use Doctrine\ORM\EntityManager;
 
 class App
 {
-    //TODO add ResponseJSON
 
     private Router $router;
 

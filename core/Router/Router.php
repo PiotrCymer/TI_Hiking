@@ -165,7 +165,9 @@ final class Router
                 $this->urlArray['route'] = 'signin';
                 $this->urlArray['filters'] = [];
             } else {
-                //TODO redirect to user homepage
+                $this->urlArray['controller'] = 'profil-uzytkownika';
+                $this->urlArray['route'] = '/';
+                $this->urlArray['filters'] = [];
             }
 
             return true;

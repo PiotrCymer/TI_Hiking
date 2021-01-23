@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Hiking test page</title>
+    <title>Profil użytkownika</title>
 
 
     <link href="/assets/css/bootstrap.css" rel="stylesheet">
@@ -17,8 +17,9 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">Expand at md</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+    <a class="navbar-brand" href="/profil-uzytkownika"><i class="fas fa-hiking" style="font-size: 60px;"></i></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar"
+            aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -36,11 +37,17 @@
         </ul>
     </div>
 </nav>
-<div class="container">
+<div class="container mt-4">
     <div class="row">
         <div class="col-md-3">
-            Witaj <?php echo $_SESSION['user']['name'];?>!<br />
-
+            <h2>Witaj <?php echo $_SESSION['user']['name']; ?>!</h2>
+            <?php if (count($this->userHiking) == 0): ?>
+                <div class="alert alert-success text-center" role="alert">
+                    Aktualnie nie posiadasz żadnych wędrówek
+                </div>
+            <?php else: ?>
+                Liczba dodanych wędrówek: <?php echo count($this->userHiking); ?>
+            <?php endif; ?>
         </div>
         <div class="col-md-9">
             <?php echo $content; ?>
@@ -54,7 +61,6 @@
 
 <script src="/assets/js/bootstrap.min.js"></script>
 <script src="/assets/js/userProfile.js"></script>
-
 
 
 <?php foreach ($scripts as $k => $v): ?>

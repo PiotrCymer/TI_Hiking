@@ -2,9 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Proszę się zalogować</title>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+    <style>
+        .error-template {
+            text-align: center;
+        }
+
+        .error-actions {
+            margin-top: 15px;
+        }
+    </style>
 </head>
 <body>
-Aby mieć dostęp do tej strony należy być zalogowanym. Kliknij tutaj aby się zalogować!
+<div class="container">
+    <div class="row">
+        <div class="col-md-12" style="display: flex;justify-content: center;">
+            <div class="error-template">
+                <h2>
+                    Aby mieć dostęp do tej strony należy być zalogowanym</h2>
+                <div class="error-actions">
+                    <a href="/signin" class="btn btn-primary btn-lg">
+                        Kliknij tutaj aby się zalogować! </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 </body>
 </html>
