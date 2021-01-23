@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Core\Response\ResponseHtml;
 use Core\Response\ResponseJson;
 use Core\Router\Router;
 use Doctrine\ORM\Tools\Setup;
@@ -18,7 +19,13 @@ class App
 
     public function __construct(Router $router)
     {
+        session_start();
         $this->router = $router;
+    }
+
+    public function __destruct()
+    {
+
     }
 
     public function go()
@@ -32,7 +39,7 @@ class App
                 $authGuard = new $authGuardClassName($this->entityManager);
 
                 if (!$authGuard->run()) {
-                    $response = new ResponseJson(401, ['status' => false, 'message' => 'Nie masz uprawnien']);
+                    $response = new ResponseHtml(401, ['file' => './templates/'.$authGuard->noValidTemplate, 'status' => false, 'message' => 'Nie masz uprawnien']);
 
                     return $response;
                 }
@@ -46,10 +53,9 @@ class App
 //            $controllerObject = new $matchedRoute['controller']($this->entityManager, $matchedRoute['filters']);
 //            call_user_func_array([$controllerObject, $matchedRoute['method']], $matchedRoute['params']);
         } else {
-            echo "Brak";
-//            $response = new ResponseJson(404, ['status' => false, 'message' => 'Podany enpoint nie istnieje']);
-//
-//            return $response;
+            $response = new ResponseHtml(404, ['file' => './templates/404.html']);
+
+            return $response;
         }
 
     }
@@ -63,9 +69,9 @@ class App
 
         $dbParams = array(
             'driver' => 'pdo_mysql',
-            'user' => 'root',
-            'password' => 'pokemon123',
-            'dbname' => 'itcrowd',
+            'user' => '###',
+            'password' => '###',
+            'dbname' => '###',
         );
 
         $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__ . "/src/Entity"), $isDevMode, $proxyDir, $cache, $useSimpleAnnotationReader);
