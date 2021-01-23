@@ -79,7 +79,6 @@ $(document).ready(function () {
     function previewVideo(input) {
         $('.videoPreview').show();
         if (input.files && input.files[0]) {
-            $('.imagesPreview').html('');
 
             $('#hikingVideoPreview').attr('src', URL.createObjectURL(input.files[0]));
         }
