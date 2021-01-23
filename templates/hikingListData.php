@@ -5,6 +5,6 @@
 
 
         <td><?php echo ($v->getStartDate())->format('Y-m-d H:i');?></td>
-        <td><button class="btn btn-secondary">Szczegóły</button></td>
+        <td><a class="btn btn-secondary" style="color: white;" href="/profil-uzytkownika/wedrowki/<?php echo $v->getId();?>">Szczegóły</a></td>
     </tr>
 <?php endforeach; ?>

@@ -146,13 +146,26 @@ final class UserController extends Controller
 
     /**
      * @Route('wedrowki/{id}')
-     * @AuthGuard('userProfileAuthGuard')
+     * @AuthGuard('userHikingAuthGuard')
      */
     public function singleHiking($id)
     {
         $template = $_SERVER['DOCUMENT_ROOT'] . $this->templatesDirectory . "singleHiking.php";
 
-        $view = $this->renderView($template, ['stylesheets' => $this->getStylesheets(''), 'scripts' => $this->getJsScripts('s')]);
+        $hiking = $this->em->getRepository("App\Entity\Hiking")->findOneBy(["id" => $id]);
+
+        if(!$hiking) {
+            $view = $this->renderView($template, ['stylesheets' => $this->getStylesheets(''), 'scripts' => $this->getJsScripts('s'), 'noHiking' => true]);
+
+            $response = new ResponseHtml(200, ["view" => $view]);
+
+
+            return $response;
+        }
+
+        $hikingImages = unserialize($hiking->getImages());
+
+        $view = $this->renderView($template, ['stylesheets' => $this->getStylesheets(''), 'scripts' => $this->getJsScripts('s'), 'noHiking' => false, 'hiking' => $hiking, 'hikingImages' => $hikingImages]);
 
         return new ResponseHtml(201, ["view" => $view]);
     }

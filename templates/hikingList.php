@@ -30,7 +30,7 @@ unset($_SESSION['messages']['hikingAdded']); ?>
         <th scope="col">Losowe zdjęcie</th>
         <th scope="col">Nazwa wędrówki</th>
         <th scope="col">Data rozpoczęcia</th>
-        <th scope="col">Handle</th>
+        <th scope="col">Akcja</th>
     </tr>
     </thead>
     <tbody id="tableBody">
