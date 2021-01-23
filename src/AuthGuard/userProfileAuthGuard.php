@@ -4,28 +4,22 @@
 namespace App\AuthGuard;
 
 
+use Core\AuthGuard\AuthGuard;
+use Core\AuthGuard\AuthGuardInterface;
 use Doctrine\ORM\EntityManager;
 
-class userProfileAuthGuard implements AuthGuard
+class userProfileAuthGuard extends AuthGuard implements AuthGuardInterface
 {
     public string $noValidTemplate = "pleaseLogin.html";
 
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManager $entityManager, $matchedRoute)
     {
         $this->em = $entityManager;
+        $this->matchedRoute = $matchedRoute;
 
     }
 
-    public function run(): bool
-    {
-        if ($this->check()) {
-            return true;
-        }
-
-        return false;
-    }
-
-    private function check(): bool
+    protected function check(): bool
     {
         if (isset($_SESSION['user'])) {
             return true;

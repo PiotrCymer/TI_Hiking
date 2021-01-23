@@ -36,7 +36,7 @@ class App
 
             if ($matchedRoute['authguard'] != "") {
                 $authGuardClassName = "App\AuthGuard\\" . $matchedRoute['authguard'];
-                $authGuard = new $authGuardClassName($this->entityManager);
+                $authGuard = new $authGuardClassName($this->entityManager, $matchedRoute);
 
                 if (!$authGuard->run()) {
                     $response = new ResponseHtml(401, ['file' => './templates/'.$authGuard->noValidTemplate, 'status' => false, 'message' => 'Nie masz uprawnien']);
